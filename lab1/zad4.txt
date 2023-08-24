@@ -1,0 +1,58 @@
+mov     edi, 16
+        call    _Znwm
+        mov     rbx, rax
+        mov     rdi, rbx
+        call    _ZN9CoolClassC1Ev
+        mov     QWORD PTR [rbp-24], rbx
+
+Ovim naredbama se rezervira memorija i  zove konstruktor razreda CoolClass, pošto se ne koristi operator new, za PlainOldClass se koristi pretpostavljeni
+konstruktor i zauzima se odgovarajuća memorija na stogu za kreiranje objekta klase PlainOldClass.
+Ne postoji poziv za alociranje objekta poc.
+
+lea     rax, [rbp-28]
+        mov     esi, 42
+        mov     rdi, rax
+        call    _ZN13PlainOldClass3setEi
+
+Ovim se instrukcijama izvodi linija: poc.set(42); i ona ima manje instrukcija jer ne treba izračunavati adresu funkcije nego je može odmah pozvati s poznatom adresom, za poziv poc.set(42)
+bi prevoditelj mogao odmah generirati naredbe funkcije jer već poznaje adresu funkcije.
+
+mov     rax, QWORD PTR [rbp-24]
+        mov     rax, QWORD PTR [rax]
+        mov     rdx, QWORD PTR [rax]
+        mov     rax, QWORD PTR [rbp-24]
+        mov     esi, 42
+        mov     rdi, rax
+        call    rdx
+
+Ovim se instrcijama izvodi linija: pb->set(42);
+
+_ZTV9CoolClass:
+        .quad   0
+        .quad   _ZTI9CoolClass
+        .quad   _ZN9CoolClass3setEi
+        .quad   _ZN9CoolClass3getEv
+
+Ovo je kod za inicijalizaciju virtualne tablice CoolClass, 
+
+_ZN9CoolClass3setEi:
+        push    rbp
+        mov     rbp, rsp
+        mov     QWORD PTR [rbp-8], rdi
+        mov     DWORD PTR [rbp-12], esi
+        mov     rax, QWORD PTR [rbp-8]
+        mov     edx, DWORD PTR [rbp-12]
+        mov     DWORD PTR [rax+8], edx
+        nop
+        pop     rbp
+        ret
+_ZN9CoolClass3getEv:
+        push    rbp
+        mov     rbp, rsp
+        mov     QWORD PTR [rbp-8], rdi
+        mov     rax, QWORD PTR [rbp-8]
+        mov     eax, DWORD PTR [rax+8]
+        pop     rbp
+        ret
+
+Ovo su definicije virtualnih funkcija za CoolClass.

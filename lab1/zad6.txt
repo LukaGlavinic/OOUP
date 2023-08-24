@@ -1,0 +1,4 @@
+Prvo konstruktor razreda Derived poziva konstruktor nadklase Base, koji poziva metodu metoda koja poziva virtualnu metodu trenutne klase a to je Base koja onda ispisuje "ja sam bazna implementacija!".
+Nakon toga se poziva konstruktor klase Derived koji poziva metudu metoda koja poziva virtualnu metodu, pointer na tu tablicu se promjenio prije pokretanja konstruktora klase Derived,
+pa se pointer prebacio na virtualnu metodu te klase i zato se ispisuje "ja sam izvedena implementacija!". Nakon toga objekt tipa Derived poziva metodu metoda koja onda poziva virtualnu metodu te klase koja 
+je tipa Derived i zato se opet poziva njezina virtualna metoda.

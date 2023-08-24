@@ -1,0 +1,3 @@
+To se događa jer prevoditelj umeće dodatne memorije da se svaki član strukture dobro poravna u memoriji, ako neki član zauzima više mjesta, prevoditelj umeće odnosno zauzima dodatne memorije.
+Cool class zauzima više memorije jer ima pointer na tablicu virtualnih funkcija, dok PlainOldClass nema virtualniifunkcija pa nema tog viška. Članske funkcije ne zauzimaju memorije same klase
+ili objekta nego se drže u zasebnom dijelu memorije.
