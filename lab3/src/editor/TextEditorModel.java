@@ -96,13 +96,13 @@ public class TextEditorModel {
     }
 
     public void paste() {
-        if(!clipboard.isEmptyClipboard()) {
+        if(clipboard.isEmptyClipboard()) {
             insert(clipboard.peekClipboard(), true);
         }
     }
 
     public void shiftPaste() {
-        if(!clipboard.isEmptyClipboard()) {
+        if(clipboard.isEmptyClipboard()) {
             insert(clipboard.popClipboard(), true);
         }
     }

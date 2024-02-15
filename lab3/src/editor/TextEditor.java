@@ -1,19 +1,14 @@
 package editor;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.KeyboardFocusManager;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serial;
 import java.lang.reflect.Constructor;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,26 +16,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-
 public class TextEditor extends JFrame implements CursorObserver, TextObserver {
  
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	private TextEditorModel model;
     private Canvas canvas;
@@ -51,7 +30,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         setLocation(0, 0);
 		setSize(500, 500);
 
-        initGUI("aaaa\nbbbb\ncccc\ndddd");
+        initGUI();
     }
 
     public static List<Plugin> getPlugins() {
@@ -60,6 +39,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         File directory = new File(path);
         File[] files = directory.listFiles();
         List<String> javaFileNames = new ArrayList<>();
+        assert files != null;
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".java")) {
                 javaFileNames.add(file.getName());
@@ -74,15 +54,14 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                 Plugin plugin = (Plugin) ctr.newInstance();
                 listaPlugina.add(plugin);
             } catch (Exception e) {
-                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }
         return listaPlugina;
     }
 
-    private void initGUI(String text) {
-        model = new TextEditorModel(text);
+    private void initGUI() {
+        model = new TextEditorModel("aaaa\nbbbb\ncccc\ndddd");
         model.setParentFrame(this);
         model.addCursorObserver(this);
         model.addTextObserver(this);
@@ -108,7 +87,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         model.informStatusObservers();
     }
 
-    private void newDokument(String text) {
+    private void newDocument(String text) {
         model = new TextEditorModel(text);
         model.setParentFrame(this);
         model.addCursorObserver(this);
@@ -279,7 +258,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                         model.insert('\n', true);
                     }else if(e.getKeyCode() == KeyEvent.VK_TAB) {
                     	model.insert("   ", true);
-                    }else if(((int)e.getKeyCode() > 31 && (int)e.getKeyCode() < 127
+                    }else if((e.getKeyCode() > 31 && e.getKeyCode() < 127
                             && e.getKeyCode() != KeyEvent.VK_UP
                             && e.getKeyCode() != KeyEvent.VK_DOWN
                             && e.getKeyCode() != KeyEvent.VK_LEFT
@@ -449,7 +428,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         JMenu pluginMenu = new JMenu("Plugins");
 		menuBar.add(pluginMenu);
 		List<Plugin> plugini = getPlugins();
-		if(plugini.size() != 0) {
+		if(!plugini.isEmpty()) {
 			for(Plugin p : plugini) {
 				JMenuItem i = new JMenuItem(createPluginAction(p));
 				pluginMenu.add(i);
@@ -462,7 +441,8 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     private Action createPluginAction(Plugin p) {
     	Action akcija = new AbstractAction() {
     		
-    		private static final long serialVersionUID = 1L;
+    		@Serial
+            private static final long serialVersionUID = 1L;
     		
     		public void actionPerformed(ActionEvent e) {
     			p.execute(model, UndoManager.instanceOf(), model.getClipboard());
@@ -500,9 +480,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
 
     //OTVARANJE DOKUMENTA
-    private Action openAction = new AbstractAction() {
+    private final Action openAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fileChooser = new JFileChooser();
@@ -523,24 +504,24 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 			try {
 				byte[] okteti = Files.readAllBytes(filePath);
                 String procitaniTekst = new String(okteti);
-                newDokument(procitaniTekst);
+                newDocument(procitaniTekst);
                 model.setPath(filePath);
-				setTitle(filePath.toString() + " - TextEditor");
+				setTitle(filePath + " - TextEditor");
 			} catch(Exception ex) {
 				JOptionPane.showMessageDialog(
                     TextEditor.this, 
 						"Error while reading file " + fileName.getAbsolutePath() + ".", 
 						"Error", 
 						JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+            }
 		}
 	};
 
     //SPREMANJE DOKUMENTA
-    private Action saveAction = new AbstractAction() {
+    private final Action saveAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			Path openedFilePath = model.getPath();
@@ -558,7 +539,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 				openedFilePath = jfc.getSelectedFile().toPath();
                 model.setPath(openedFilePath);
 			}
-            setTitle(openedFilePath.toString() + " - TextEditor");
+            setTitle(openedFilePath + " - TextEditor");
 
             Iterator<String> it = model.allLines();
             String savTekst = "";
@@ -568,10 +549,9 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                     savTekst += "\n";
                 }
             }
-			byte[] podatci = savTekst.getBytes(StandardCharsets.UTF_8);
 
             try {
-                Files.write(openedFilePath, podatci);
+                Files.writeString(openedFilePath, savTekst);
             }catch (IOException e1) {
                 JOptionPane.showMessageDialog(
                     TextEditor.this, 
@@ -589,9 +569,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //IZLAZAK
-    private Action exitAction = new AbstractAction() {
+    private final Action exitAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
@@ -599,9 +580,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //UNDO
-    private Action undoAction = new AbstractAction() {
+    private final Action undoAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			UndoManager.instanceOf().undo();
@@ -609,9 +591,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //REDO
-    private Action redoAction = new AbstractAction() {
+    private final Action redoAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			UndoManager.instanceOf().redo();
@@ -619,9 +602,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //COPY
-    private Action copyAction = new AbstractAction() {
+    private final Action copyAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.copy();
@@ -629,9 +613,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //CUT
-    private Action cutAction = new AbstractAction() {
+    private final Action cutAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.cut();
@@ -639,9 +624,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //PASTE
-    private Action pasteAction = new AbstractAction() {
+    private final Action pasteAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.paste();
@@ -649,9 +635,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //PASTE AND TAKE
-    private Action pasteAndTakeAction = new AbstractAction() {
+    private final Action pasteAndTakeAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.shiftPaste();
@@ -659,9 +646,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //DELETE SECTION
-    private Action deleteSectionAction = new AbstractAction() {
+    private final Action deleteSectionAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.deleteRange(model.getSelectionRange(), true);
@@ -669,9 +657,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //CLEAR
-    private Action clearAction = new AbstractAction() {
+    private final Action clearAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.deleteRange(new LocationRange(new Location(0, 0), model.getEndOfDocument()), true);
@@ -679,9 +668,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //CURSOR TO START
-    private Action cursorToStartAction = new AbstractAction() {
+    private final Action cursorToStartAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.setCursorLocation(new Location(0, 0));
@@ -689,9 +679,10 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 	};
 
     //CURSOR TO END
-    private Action cursorToEndAction = new AbstractAction() {
+    private final Action cursorToEndAction = new AbstractAction() {
 		
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 		
 		public void actionPerformed(ActionEvent e) {
 			model.setCursorLocation(model.getEndOfDocument());
@@ -701,7 +692,8 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     //CANVAS_FOR_DRAWING
     private class Canvas extends JComponent {
         
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 
 		@Override
         protected void paintComponent(Graphics g) {
@@ -751,7 +743,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             int i = 1;
             while(it.hasNext()) {
                 String line = it.next();
-                g2d.drawString(line, 0, 0 + i * fm.getAscent());
+                g2d.drawString(line, 0, i * fm.getAscent());
                 i++;
             }
         }
@@ -812,10 +804,6 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new TextEditor().setVisible(true);
-			}
-		});
+        SwingUtilities.invokeLater(() -> new TextEditor().setVisible(true));
     }
 }

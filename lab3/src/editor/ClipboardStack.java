@@ -1,10 +1,9 @@
 package editor;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.swing.AbstractButton;
 
 public class ClipboardStack {
 
@@ -29,14 +28,14 @@ public class ClipboardStack {
 
     public String peekClipboard() {
         String text = "";
-        if(!isEmptyClipboard()) {
+        if(isEmptyClipboard()) {
             text += texts.peek();
         }
         return text;
     }
 
     public boolean isEmptyClipboard() {
-        return texts.empty();
+        return !texts.empty();
     }
 
     public void clearClipboard() {
@@ -54,7 +53,7 @@ public class ClipboardStack {
 
     public void informClipboardObservers() {
         for(AbstractButton b : clipboardObservers) {
-            b.setEnabled(!isEmptyClipboard());
+            b.setEnabled(isEmptyClipboard());
         }
     }
 }

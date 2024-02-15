@@ -1,10 +1,9 @@
 package editor;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.swing.AbstractButton;
 
 public class UndoManager {
     
