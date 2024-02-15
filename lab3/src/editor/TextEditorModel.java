@@ -1,14 +1,8 @@
 package editor;
 
+import javax.swing.*;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.AbstractButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import java.util.*;
 
 public class TextEditorModel {
 
@@ -28,10 +22,8 @@ public class TextEditorModel {
     public TextEditorModel(String text) {
         lines = new LinkedList<>();
         String[] textLines = text.split("\n");
-        
-        for(int i = 0; i < textLines.length; i++) {
-            lines.add(textLines[i]);
-        }
+
+        lines.addAll(Arrays.asList(textLines));
         cursorObservers = new ArrayList<>();
         textObservers = new ArrayList<>();
         selectionObservers = new ArrayList<>();
@@ -78,18 +70,18 @@ public class TextEditorModel {
 
     protected void informSelObservers() {
         for(AbstractButton b : selectionObservers) {
-            b.setEnabled(!isRangeEmpty());
+            b.setEnabled(isRangeEmpty());
         }
     }
 
     public void copy() {
-        if(!isRangeEmpty()) {
+        if(isRangeEmpty()) {
             clipboard.pushClipboard(getSelectedText());
         }
     }
 
     public void cut() {
-        if(!isRangeEmpty()) {
+        if(isRangeEmpty()) {
             clipboard.pushClipboard(getSelectedText());
             deleteRange(selectionRange, true);
         }
@@ -108,25 +100,25 @@ public class TextEditorModel {
     }
 
     private String getSelectedText() {
-        String selected = "";
+        StringBuilder selected = new StringBuilder();
         Location start = selectionRange.getStart();
         Location fin = selectionRange.getFinish();
         if(start.getY() == fin.getY()) {
-        	selected += lines.get(start.getY()).substring(start.getX(), fin.getX());
+        	selected.append(lines.get(start.getY()), start.getX(), fin.getX());
         }else {
-        	selected += lines.get(start.getY()).substring(start.getX());
-        	selected += "\n";
+        	selected.append(lines.get(start.getY()).substring(start.getX()));
+        	selected.append("\n");
             for(int i = start.getY() + 1; i < fin.getY(); i++) {
-            	selected += lines.get(i);
-            	selected += "\n";
+            	selected.append(lines.get(i));
+            	selected.append("\n");
             }
-            selected += lines.get(fin.getY()).substring(0, fin.getX());
+            selected.append(lines.get(fin.getY()), 0, fin.getX());
         }
-        return selected;
+        return selected.toString();
     }
 
     private boolean isRangeEmpty() {
-        return selectionRange.getStart().equals(selectionRange.getFinish());
+        return !selectionRange.getStart().equals(selectionRange.getFinish());
     }
 
     private void informAllCursor() {
@@ -178,19 +170,19 @@ public class TextEditorModel {
     }
 
     public void moveCursorUp() {
-        cursorLocation.setY(cursorLocation.getY() - 1 < 0 ? 0 : cursorLocation.getY() - 1);
-        cursorLocation.setX(cursorLocation.getX() > lines.get(cursorLocation.getY()).length() ? lines.get(cursorLocation.getY()).length() : cursorLocation.getX());
+        cursorLocation.setY(Math.max(cursorLocation.getY() - 1, 0));
+        cursorLocation.setX(Math.min(cursorLocation.getX(), lines.get(cursorLocation.getY()).length()));
         informAllCursor();
     }
 
     public void moveCursorDown() {
         cursorLocation.setY(cursorLocation.getY() + 2 > lines.size() ? cursorLocation.getY() : cursorLocation.getY() + 1);
-        cursorLocation.setX(cursorLocation.getX() > lines.get(cursorLocation.getY()).length() ? lines.get(cursorLocation.getY()).length() : cursorLocation.getX());
+        cursorLocation.setX(Math.min(cursorLocation.getX(), lines.get(cursorLocation.getY()).length()));
         informAllCursor();
     }
 
     public void deleteBefore(boolean putOnUndoStack) {
-        if(!isRangeEmpty()) {
+        if(isRangeEmpty()) {
             deleteRange(selectionRange, true);
         }else {
             String currentLine = lines.get(cursorLocation.getY());
@@ -218,7 +210,7 @@ public class TextEditorModel {
     }
 
     public void deleteAfter(boolean putOnUndoStack) {
-        if(!isRangeEmpty()) {
+        if(isRangeEmpty()) {
             deleteRange(selectionRange, true);
         }else {
             String currentLine = lines.get(cursorLocation.getY());
@@ -271,8 +263,8 @@ public class TextEditorModel {
             if(fin.getX() < ending.length()) {
                 total += ending.substring(fin.getX());
             }
-            for(int i = start.getY(); i <= fin.getY(); i++) {
-                lines.remove(start.getY());
+            if (fin.getY() >= start.getY()) {
+                lines.subList(start.getY(), fin.getY() + 1).clear();
             }
             lines.add(start.getY(), total);
         }
@@ -281,7 +273,7 @@ public class TextEditorModel {
     }
 
     public void insert(char c, boolean putOnUndoStack) {
-        if(!isRangeEmpty()) {
+        if(isRangeEmpty()) {
             deleteRange(selectionRange, true);
         }
         
@@ -303,7 +295,7 @@ public class TextEditorModel {
     }
 
     public void insert(String text, boolean putOnUndoStack) {
-    	if(!isRangeEmpty()) {
+    	if(isRangeEmpty()) {
             deleteRange(selectionRange, true);
         }
         
@@ -350,7 +342,6 @@ public class TextEditorModel {
 
     /**
      * PROMATRACI KURSORA
-     * @param o
      */
     public void addCursorObserver(CursorObserver o) {
         cursorObservers.add(o);
@@ -362,7 +353,6 @@ public class TextEditorModel {
 
     /**
      * PROMATRACI TEKSTA
-     * @param o
      */
     public void addTextObserver(TextObserver o) {
         textObservers.add(o);
@@ -401,7 +391,7 @@ public class TextEditorModel {
     }
 
     public Location getEndOfDocument() {
-        return new Location(lines.get(lines.size() - 1).length(), lines.size() - 1);
+        return new Location(lines.getLast().length(), lines.size() - 1);
     }
 
     public ClipboardStack getClipboard() {

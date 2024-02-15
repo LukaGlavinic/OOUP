@@ -542,16 +542,16 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             setTitle(openedFilePath + " - TextEditor");
 
             Iterator<String> it = model.allLines();
-            String savTekst = "";
+            StringBuilder savTekst = new StringBuilder();
             while(it.hasNext()) {
-                savTekst += it.next();
+                savTekst.append(it.next());
                 if(it.hasNext()) {
-                    savTekst += "\n";
+                    savTekst.append("\n");
                 }
             }
 
             try {
-                Files.writeString(openedFilePath, savTekst);
+                Files.writeString(openedFilePath, savTekst.toString());
             }catch (IOException e1) {
                 JOptionPane.showMessageDialog(
                     TextEditor.this, 
