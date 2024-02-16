@@ -7,8 +7,8 @@ import java.util.Stack;
 
 public class ClipboardStack {
 
-    private Stack<String> texts;
-    private List<AbstractButton> clipboardObservers;
+    private final Stack<String> texts;
+    private final List<AbstractButton> clipboardObservers;
 
     public ClipboardStack() {
         texts = new Stack<>();

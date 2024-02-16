@@ -19,8 +19,7 @@ public class AnimalFactory {
         try {
             clazz = (Class<Animal>)Class.forName("model.plugins." + animalKind);
             Constructor<?> ctr = clazz.getConstructor(String.class);
-            Animal animal = (Animal)ctr.newInstance(name);
-            return animal;
+            return (Animal)ctr.newInstance(name);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -30,12 +29,14 @@ public class AnimalFactory {
     public static void main(String[] args) {
         Animal papiga = newInstance("Parrot", "Pero");
 
+        assert papiga != null;
         System.out.println("Papiga se zove: " + papiga.name());
         papiga.animalPrintGreeting();
         papiga.animalPrintMenu();
 
         Animal tigar = newInstance("Tiger", "Tibor");
 
+        assert tigar != null;
         System.out.println("Tigar se zove: " + tigar.name());
         tigar.animalPrintGreeting();
         tigar.animalPrintMenu();

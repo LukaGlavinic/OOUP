@@ -4,7 +4,7 @@ import model.Animal;
 
 public class Tiger extends Animal{
 
-    private String animalName;
+    private final String animalName;
 
 	public Tiger(String name) {
 		this.animalName = name;

@@ -753,42 +753,28 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         Location oldStart = oldRange.getStart();
         Location oldFin = oldRange.getFinish();
         Location newCursor = model.getCursorLocation();
-        Location newStart = null, newFin = null;
+        Location newStart, newFin, comp = null;
 
         if(oldCursor.equals(oldStart)) {
-            //if cursor is on start
-            if(newCursor.getY() == oldFin.getY()) {//if in the same line
-                if(newCursor.getX() > oldFin.getX()) {
-                	newStart = new Location(oldFin.getX(), oldFin.getY());
-                	newFin = new Location(newCursor.getX(), newCursor.getY());
-                }else {
-                	newStart = new Location(newCursor.getX(), newCursor.getY());
-                    newFin = new Location(oldFin.getX(), oldFin.getY());
-                }
-            }else if(newCursor.getY() < oldFin.getY()) {//new start is above fin
-            	newStart = new Location(newCursor.getX(), newCursor.getY());
-            	newFin = new Location(oldFin.getX(), oldFin.getY());
-            }else {//new start is below fin
-            	newStart = new Location(oldFin.getX(), oldFin.getY());
-            	newFin = new Location(newCursor.getX(), newCursor.getY());
-            }
+            comp = oldFin;
         }else if(oldCursor.equals(oldFin)) {
-            //if cursor is on fin
-            if(newCursor.getY() == oldStart.getY()) {
-                if(newCursor.getX() > oldStart.getX()) {
-                	newStart = new Location(oldStart.getX(), oldStart.getY());
-                	newFin = new Location(newCursor.getX(), newCursor.getY());
-                }else {
-                	newStart = new Location(newCursor.getX(), newCursor.getY());
-                	newFin = new Location(oldStart.getX(), oldStart.getY());
-                }
-            }else if(newCursor.getY() < oldStart.getY()) {
-            	newStart = new Location(newCursor.getX(), newCursor.getY());
-            	newFin = new Location(oldStart.getX(), oldStart.getY());
+            comp = oldStart;
+        }
+        assert comp != null;
+        if(newCursor.getY() == comp.getY()) {
+            if(newCursor.getX() > comp.getX()) {
+                newStart = new Location(comp.getX(), comp.getY());
+                newFin = new Location(newCursor.getX(), newCursor.getY());
             }else {
-            	newStart = new Location(oldStart.getX(), oldStart.getY());
-            	newFin = new Location(newCursor.getX(), newCursor.getY());
+                newStart = new Location(newCursor.getX(), newCursor.getY());
+                newFin = new Location(comp.getX(), comp.getY());
             }
+        }else if(newCursor.getY() < comp.getY()) {
+            newStart = new Location(newCursor.getX(), newCursor.getY());
+            newFin = new Location(comp.getX(), comp.getY());
+        }else {
+            newStart = new Location(comp.getX(), comp.getY());
+            newFin = new Location(newCursor.getX(), newCursor.getY());
         }
         return new LocationRange(newStart, newFin);
     }

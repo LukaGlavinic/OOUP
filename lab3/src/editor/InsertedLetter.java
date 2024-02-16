@@ -2,9 +2,9 @@ package editor;
 
 public class InsertedLetter implements EditAction {
 	
-	private TextEditorModel model;
-    private char letter;
-    private Location cursor;
+	private final TextEditorModel model;
+    private final char letter;
+    private final Location cursor;
 
 	public InsertedLetter(TextEditorModel model, char letter, Location cursor) {
 		this.model = model;

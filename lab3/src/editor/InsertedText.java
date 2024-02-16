@@ -2,9 +2,9 @@ package editor;
 
 public class InsertedText implements EditAction {
 	
-	private TextEditorModel model;
-    private String text;
-    private LocationRange range;
+	private final TextEditorModel model;
+    private final String text;
+    private final LocationRange range;
 
 	public InsertedText(TextEditorModel model, String text, LocationRange range) {
 		this.model = model;

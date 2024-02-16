@@ -7,17 +7,17 @@ import java.util.*;
 public class TextEditorModel {
 
 	private JFrame parentFrame;
-    private List<String> lines;
+    private final List<String> lines;
     private LocationRange selectionRange;
-    private Location cursorLocation;
-    private ClipboardStack clipboard;
-    private UndoManager undoManager;
+    private final Location cursorLocation;
+    private final ClipboardStack clipboard;
+    private final UndoManager undoManager;
     private Path path;
 
-    private List<CursorObserver> cursorObservers;
-    private List<TextObserver> textObservers;
-    private List<AbstractButton> selectionObservers;
-    private List<JLabel> statusObservers;
+    private final List<CursorObserver> cursorObservers;
+    private final List<TextObserver> textObservers;
+    private final List<AbstractButton> selectionObservers;
+    private final List<JLabel> statusObservers;
     
     public TextEditorModel(String text) {
         lines = new LinkedList<>();
