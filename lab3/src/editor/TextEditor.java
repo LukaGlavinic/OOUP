@@ -112,7 +112,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
 
     private void createListeners() {
-        //UP_key
+//        UP_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -132,7 +132,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //DOWN_key
+//        DOWN_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -152,7 +152,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //LEFT_key
+//        LEFT_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -172,7 +172,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //RIGHT_key
+//        RIGHT_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -192,7 +192,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //HOME_key
+//        HOME_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_HOME) {
@@ -212,7 +212,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //END_key
+//        END_key
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_END) {
@@ -232,7 +232,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //DELETE
+//        DELETE
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_DELETE) {
@@ -241,7 +241,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //BACKSPACE
+//        BACKSPACE
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
@@ -250,7 +250,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             }
         });
 
-        //CHARACTER
+//        CHARACTER
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if(!e.isControlDown()) {
@@ -281,38 +281,6 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                             && e.getKeyCode() != KeyEvent.VK_F11
                             && e.getKeyCode() != KeyEvent.VK_F12)) {
                         model.insert(e.getKeyChar(), true);
-                    }
-                }
-            }
-        });
-
-        //CTRL+C, CTRL+X, CTRL+V, CTRL+SHIFT+V
-        addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if(e.isControlDown()) {
-                    if(e.getKeyCode() == KeyEvent.VK_C) {
-                        model.copy();
-                    }else if(e.getKeyCode() == KeyEvent.VK_X) {
-                        model.cut();
-                    }else if(e.getKeyCode() == KeyEvent.VK_V) {
-                        if(e.isShiftDown()) {
-                            model.shiftPaste();
-                        }else {
-                            model.paste();
-                        }
-                    }
-                }
-            }
-        });
-
-        //CTRL+Z, CTRL+Y
-        addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if(e.isControlDown()) {
-                    if(e.getKeyCode() == KeyEvent.VK_Z) {
-                    	UndoManager.instanceOf().undo();
-                    }else if(e.getKeyCode() == KeyEvent.VK_Y) {
-                    	UndoManager.instanceOf().redo();
                     }
                 }
             }
@@ -366,11 +334,11 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         clearAction.putValue(Action.SHORT_DESCRIPTION, "Used to clear the document.");
         
         cursorToStartAction.putValue(Action.NAME, "Cursor to document start");
-        cursorToStartAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("HOME"));
+        cursorToStartAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0));
         cursorToStartAction.putValue(Action.SHORT_DESCRIPTION, "Used to move cursor to document start.");
 
         cursorToEndAction.putValue(Action.NAME, "Cursor to document end");
-        cursorToEndAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("END"));
+        cursorToEndAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0));
         cursorToEndAction.putValue(Action.SHORT_DESCRIPTION, "Used to open move cursor to document end.");
     }
 
@@ -412,6 +380,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         editMenu.add(copy);
         editMenu.add(paste);
         editMenu.add(pasteAndTake);
+        editMenu.addSeparator();
         editMenu.add(deleteSection);
         editMenu.addSeparator();
         editMenu.add(clear);
@@ -477,7 +446,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		getContentPane().add(toolBar, BorderLayout.PAGE_START);
     }
 
-    //OTVARANJE DOKUMENTA
+//    OPEN
     private final Action openAction = new AbstractAction() {
 		
 		@Serial
@@ -515,7 +484,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //SPREMANJE DOKUMENTA
+//    SAVE
     private final Action saveAction = new AbstractAction() {
 		
 		@Serial
@@ -566,7 +535,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //IZLAZAK
+//    EXIT
     private final Action exitAction = new AbstractAction() {
 		
 		@Serial
@@ -577,7 +546,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //UNDO
+//    UNDO
     private final Action undoAction = new AbstractAction() {
 		
 		@Serial
@@ -588,7 +557,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //REDO
+//    REDO
     private final Action redoAction = new AbstractAction() {
 		
 		@Serial
@@ -599,7 +568,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //COPY
+//    COPY
     private final Action copyAction = new AbstractAction() {
 		
 		@Serial
@@ -610,7 +579,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //CUT
+//    CUT
     private final Action cutAction = new AbstractAction() {
 		
 		@Serial
@@ -621,7 +590,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //PASTE
+//    PASTE
     private final Action pasteAction = new AbstractAction() {
 		
 		@Serial
@@ -632,7 +601,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //PASTE AND TAKE
+//    PASTE AND TAKE
     private final Action pasteAndTakeAction = new AbstractAction() {
 		
 		@Serial
@@ -643,7 +612,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //DELETE SECTION
+//    DELETE SECTION
     private final Action deleteSectionAction = new AbstractAction() {
 		
 		@Serial
@@ -654,7 +623,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //CLEAR
+//    CLEAR
     private final Action clearAction = new AbstractAction() {
 		
 		@Serial
@@ -665,7 +634,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //CURSOR TO START
+//    CURSOR TO START
     private final Action cursorToStartAction = new AbstractAction() {
 		
 		@Serial
@@ -676,7 +645,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //CURSOR TO END
+//    CURSOR TO END
     private final Action cursorToEndAction = new AbstractAction() {
 		
 		@Serial
@@ -687,7 +656,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 		}
 	};
 
-    //CANVAS_FOR_DRAWING
+//    CANVAS_FOR_DRAWING
     private class Canvas extends JComponent {
         
 		@Serial

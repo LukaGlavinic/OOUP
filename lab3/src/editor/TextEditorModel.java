@@ -33,6 +33,7 @@ public class TextEditorModel {
         clipboard = new ClipboardStack();
         undoManager = UndoManager.instanceOf();
         path = null;
+
         informAllCursor();
         informAllText();
     }
@@ -222,12 +223,12 @@ public class TextEditorModel {
                 }
             }else {
                 if(cursorLocation.getY() < lines.size() - 1) {
-                	if(putOnUndoStack) {
-                    	undoManager.push(new DeletedLetter(this, '\n', new Location(cursorLocation.getX(), cursorLocation.getY())));
-                	}
                     String nextRow = lines.remove(cursorLocation.getY() + 1);
                     String newText = currentLine + nextRow;
                     lines.set(cursorLocation.getY(), newText);
+                    if(putOnUndoStack) {
+                        undoManager.push(new DeletedLetter(this, '\n', new Location(cursorLocation.getX(), cursorLocation.getY())));
+                    }
                 }
             }
             informAllText();
@@ -250,14 +251,14 @@ public class TextEditorModel {
             String newText = trenString.substring(0, start.getX()) + residual;
             lines.set(start.getY(), newText);
         }else {
-            //begining line
-            String begining = lines.get(start.getY());
+            //beginning line
+            String beginning = lines.get(start.getY());
             String ending = lines.get(fin.getY());
             String total = "";
-            if(start.getX() < begining.length()) {
-                total += begining.substring(0, start.getX());
+            if(start.getX() < beginning.length()) {
+                total += beginning.substring(0, start.getX());
             }else {
-                total += begining;
+                total += beginning;
             }
             //ending line
             if(fin.getX() < ending.length()) {
@@ -288,7 +289,6 @@ public class TextEditorModel {
             lines.add(cursorLocation.getY(), beforeCursor);
         }
         if(putOnUndoStack) {
-            System.out.println("Novi znak: " + c);
             undoManager.push(new InsertedLetter(this, c, new Location(cursorLocation.getX(), cursorLocation.getY())));
         }
         moveCursorRight();
