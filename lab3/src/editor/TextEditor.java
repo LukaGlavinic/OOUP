@@ -35,7 +35,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 
     public static List<Plugin> getPlugins() {
         String path = "C:\\Users\\Luka\\eclipse-workspace\\OOUP_lab3\\src\\editor\\plugins";
-        ArrayList<Plugin> listaPlugina = new ArrayList<>();
+        ArrayList<Plugin> listOfPlugins = new ArrayList<>();
         File directory = new File(path);
         File[] files = directory.listFiles();
         List<String> javaFileNames = new ArrayList<>();
@@ -52,16 +52,16 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                 Class<?> clazz = Class.forName(fullClassName);
                 Constructor<?> ctr = clazz.getConstructor();
                 Plugin plugin = (Plugin) ctr.newInstance();
-                listaPlugina.add(plugin);
+                listOfPlugins.add(plugin);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        return listaPlugina;
+        return listOfPlugins;
     }
 
     private void initGUI() {
-        model = new TextEditorModel("aaaa\nbbbb\ncccc\ndddd");
+        model = new TextEditorModel("");
         model.setParentFrame(this);
         model.addCursorObserver(this);
         model.addTextObserver(this);
@@ -333,8 +333,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
         exitAction.putValue(Action.NAME, "Exit");
         exitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("alt F4"));
 		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exit application.");
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        
         undoAction.putValue(Action.NAME, "Undo");
         undoAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Z"));
         undoAction.putValue(Action.SHORT_DESCRIPTION, "Used to undo the last change of the document.");
@@ -365,8 +364,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 
         clearAction.putValue(Action.NAME, "Clear document");
         clearAction.putValue(Action.SHORT_DESCRIPTION, "Used to clear the document.");
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        
         cursorToStartAction.putValue(Action.NAME, "Cursor to document start");
         cursorToStartAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("HOME"));
         cursorToStartAction.putValue(Action.SHORT_DESCRIPTION, "Used to move cursor to document start.");
@@ -427,9 +425,9 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 
         JMenu pluginMenu = new JMenu("Plugins");
 		menuBar.add(pluginMenu);
-		List<Plugin> plugini = getPlugins();
-		if(!plugini.isEmpty()) {
-			for(Plugin p : plugini) {
+		List<Plugin> plugins = getPlugins();
+		if(!plugins.isEmpty()) {
+			for(Plugin p : plugins) {
 				JMenuItem i = new JMenuItem(createPluginAction(p));
 				pluginMenu.add(i);
 			}
@@ -439,7 +437,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
     
     private Action createPluginAction(Plugin p) {
-    	Action akcija = new AbstractAction() {
+    	Action action = new AbstractAction() {
     		
     		@Serial
             private static final long serialVersionUID = 1L;
@@ -448,9 +446,9 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     			p.execute(model, UndoManager.instanceOf(), model.getClipboard());
     		}
     	};
-    	akcija.putValue(Action.NAME, p.getName());
-    	akcija.putValue(Action.SHORT_DESCRIPTION, p.getDescription());
-    	return akcija;
+    	action.putValue(Action.NAME, p.getName());
+    	action.putValue(Action.SHORT_DESCRIPTION, p.getDescription());
+    	return action;
     }
 
     private void createToolbar() {
@@ -502,9 +500,9 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 				return;
 			}
 			try {
-				byte[] okteti = Files.readAllBytes(filePath);
-                String procitaniTekst = new String(okteti);
-                newDocument(procitaniTekst);
+				byte[] octets = Files.readAllBytes(filePath);
+                String readText = new String(octets);
+                newDocument(readText);
                 model.setPath(filePath);
 				setTitle(filePath + " - TextEditor");
 			} catch(Exception ex) {
@@ -542,16 +540,16 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             setTitle(openedFilePath + " - TextEditor");
 
             Iterator<String> it = model.allLines();
-            StringBuilder savTekst = new StringBuilder();
+            StringBuilder totalText = new StringBuilder();
             while(it.hasNext()) {
-                savTekst.append(it.next());
+                totalText.append(it.next());
                 if(it.hasNext()) {
-                    savTekst.append("\n");
+                    totalText.append("\n");
                 }
             }
 
             try {
-                Files.writeString(openedFilePath, savTekst.toString());
+                Files.writeString(openedFilePath, totalText.toString());
             }catch (IOException e1) {
                 JOptionPane.showMessageDialog(
                     TextEditor.this, 
@@ -718,13 +716,13 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                     Iterator<String> it = model.linesRange(start.getY(), fin.getY() + 1);
                     int i = 0;
                     while(it.hasNext()) {
-                        String trenLinija = it.next();
+                        String currentLine = it.next();
                         if(i == 0) {//first
-                            g2d.fillRect(start.getX() * fm.charWidth(' '), start.getY() * fm.getAscent(), (trenLinija.length() - start.getX()) * fm.charWidth(' '), fm.getAscent());
+                            g2d.fillRect(start.getX() * fm.charWidth(' '), start.getY() * fm.getAscent(), (currentLine.length() - start.getX()) * fm.charWidth(' '), fm.getAscent());
                         }else if(!it.hasNext()) {//last
                             g2d.fillRect(0, fin.getY() * fm.getAscent(), fin.getX() * fm.charWidth(' '), fm.getAscent());
                         }else {//between
-                            g2d.fillRect(0, (start.getY() + i) * fm.getAscent(), trenLinija.length() * fm.charWidth(' '), fm.getAscent());
+                            g2d.fillRect(0, (start.getY() + i) * fm.getAscent(), currentLine.length() * fm.charWidth(' '), fm.getAscent());
                         }
                         i++;
                     }

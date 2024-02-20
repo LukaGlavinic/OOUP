@@ -7,10 +7,10 @@ import java.util.Stack;
 
 public class UndoManager {
     
-    private Stack<EditAction> undoStack;
-    private Stack<EditAction> redoStack;
-    private List<AbstractButton> undoObservers;
-    private List<AbstractButton> redoObservers;
+    private final Stack<EditAction> undoStack;
+    private final Stack<EditAction> redoStack;
+    private final List<AbstractButton> undoObservers;
+    private final List<AbstractButton> redoObservers;
 
     private static UndoManager manager;
 

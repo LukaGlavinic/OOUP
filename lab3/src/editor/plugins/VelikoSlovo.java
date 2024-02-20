@@ -1,12 +1,8 @@
 package editor.plugins;
 
+import editor.*;
+
 import java.util.Iterator;
-import editor.ClipboardStack;
-import editor.Location;
-import editor.LocationRange;
-import editor.Plugin;
-import editor.TextEditorModel;
-import editor.UndoManager;
 
 public class VelikoSlovo implements Plugin {
 	
@@ -15,7 +11,7 @@ public class VelikoSlovo implements Plugin {
     @Override
     public void execute(TextEditorModel model, UndoManager undoManager, ClipboardStack clipboardStack) {
     	Iterator<String> it = model.allLines();
-    	String newText = "";
+    	StringBuilder newText = new StringBuilder();
         while(it.hasNext()) {
         	String line = it.next();
         	char[] letters = line.toCharArray();
@@ -33,13 +29,13 @@ public class VelikoSlovo implements Plugin {
                     output.append(c);
                 }
             }
-            newText += output.toString();
+            newText.append(output);
         	if(it.hasNext()) {
-        		newText += "\n";
+        		newText.append("\n");
         	}
         }
         model.deleteRange(new LocationRange(new Location(0, 0), model.getEndOfDocument()), false);
-        model.insert(newText, false);
+        model.insert(newText.toString(), false);
     }
 
     @Override

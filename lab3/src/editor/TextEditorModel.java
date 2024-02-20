@@ -58,7 +58,7 @@ public class TextEditorModel {
     }
 
     protected void informStatusObservers() {
-        String status = "Total number of lines: " + lines.size() + "       |       Line: " + (cursorLocation.getY() + 1) + "    Column: " + (cursorLocation.getX() + 1);
+        String status = "Total number of lines: " + getNumOfLines() + "       |       Line: " + (cursorLocation.getY() + 1) + "    Column: " + (cursorLocation.getX() + 1);
         for(JLabel l : statusObservers) {
             l.setText(status);
         }
@@ -288,6 +288,7 @@ public class TextEditorModel {
             lines.add(cursorLocation.getY(), beforeCursor);
         }
         if(putOnUndoStack) {
+            System.out.println("Novi znak: " + c);
             undoManager.push(new InsertedLetter(this, c, new Location(cursorLocation.getX(), cursorLocation.getY())));
         }
         moveCursorRight();

@@ -1,22 +1,15 @@
 package editor;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import java.io.Serial;
 
 public class OsnKomp extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Platno platno;
+	@Serial
+    private static final long serialVersionUID = 1L;
 
     public OsnKomp() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -33,13 +26,14 @@ public class OsnKomp extends JFrame {
     }
 
     private void initGUI() {
-        platno = new Platno();
+        Platno platno = new Platno();
         getContentPane().add(platno);
     }
 
-    private class Platno extends JComponent {
+    private static class Platno extends JComponent {
         
-		private static final long serialVersionUID = 1L;
+		@Serial
+        private static final long serialVersionUID = 1L;
 
 		@Override
         protected void paintComponent(Graphics g) {
@@ -54,15 +48,11 @@ public class OsnKomp extends JFrame {
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.BLACK);
-            g.drawString("This is another test string", 0, 0 + fm.getAscent());
-            g.drawString("This is another new test string", 0, 0 + 2 * fm.getAscent());
+            g.drawString("This is another test string", 0, fm.getAscent());
+            g.drawString("This is another new test string", 0, 2 * fm.getAscent());
         }
     }
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new OsnKomp().setVisible(true);
-			}
-		});
+        SwingUtilities.invokeLater(() -> new OsnKomp().setVisible(true));
     }
 }

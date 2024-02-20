@@ -2,9 +2,9 @@ package editor;
 
 public class DeletedText implements EditAction {
 
-    private TextEditorModel model;
-    private String text;
-    private LocationRange range;
+    private final TextEditorModel model;
+    private final String text;
+    private final LocationRange range;
 
     public DeletedText(TextEditorModel model, String text, LocationRange range) {
         this.model = model;

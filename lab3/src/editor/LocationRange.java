@@ -2,8 +2,8 @@ package editor;
 
 public class LocationRange {
  
-    private Location start;
-    private Location finish;
+    private final Location start;
+    private final Location finish;
 
     public LocationRange(Location start, Location finish) {
         this.start = start;
@@ -52,10 +52,7 @@ public class LocationRange {
         }else if(!start.equals(other.start))
             return false;
         if(finish == null) {
-            if(other.finish != null)
-                return false;
-        }else if(!finish.equals(other.finish))
-            return false;
-        return true;
+            return other.finish == null;
+        }else return finish.equals(other.finish);
     }
 }

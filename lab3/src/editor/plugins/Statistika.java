@@ -1,13 +1,12 @@
 package editor.plugins;
 
-import java.util.Iterator;
-
-import javax.swing.JOptionPane;
-
 import editor.ClipboardStack;
 import editor.Plugin;
 import editor.TextEditorModel;
 import editor.UndoManager;
+
+import javax.swing.*;
+import java.util.Iterator;
 
 public class Statistika implements Plugin {
 	
@@ -20,10 +19,10 @@ public class Statistika implements Plugin {
         while(it.hasNext()) {
         	String linija = it.next();
         	brojLinija++;
-        	String[] rijeci = linija.split("[\s\t]+");
+        	String[] rijeci = linija.split("[ \t]+");
         	brojRijeci += rijeci.length;
         	for(String rijec : rijeci) {
-        		brojSlova += rijec.chars().filter(Character::isLetter).count();
+        		brojSlova += (int) rijec.chars().filter(Character::isLetter).count();
         	}
         }
         String statistika = "Ukupno linija: " + brojLinija + "\nBroj riječi: " + brojRijeci + "\nBroj slova: " + brojSlova;
