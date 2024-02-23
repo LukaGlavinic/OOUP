@@ -1,30 +1,27 @@
 package paint;
 
 public class Point {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Point(int x, int y) {
-        // ...
+        this.x = x;
+        this.y = y;
     }
 
     public int getX() {
-        // ...
-        return 0;
+        return x;
     }
 
     public int getY() {
-        // ...
-        return 0;
+        return y;
     }
 
     public Point translate(Point dp) {
-        // vraća NOVU točku translatiranu za argument tj. THIS+DP...
-        return dp;
+        return new Point(x + dp.x, y + dp.y);
     }
 
     public Point difference(Point p) {
-        // vraća NOVU točku koja predstavlja razliku THIS-P...
-        return p;
+        return new Point(x - p.x, y - p.y);
     }
 }

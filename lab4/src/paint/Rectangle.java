@@ -1,32 +1,31 @@
 package paint;
 
 public class Rectangle {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
 
     public Rectangle(int x, int y, int width, int height) {
-        // ...
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     };
 
     public int getX() {
-        // ...
-        return 0;
+        return x;
     }
 
     public int getY() {
-        // ...
-        return 0;
+        return y;
     }
 
     public int getWidth() {
-        // ...
-        return 0;
+        return width;
     }
 
     public int getHeight() {
-        // ...
-        return 0;
+        return height;
     }
 }
