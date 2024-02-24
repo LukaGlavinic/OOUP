@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractGraphicalObject implements GraphicalObject{
-    private Point[] hotPoints;
+    private final Point[] hotPoints;
     private boolean[] hotPointSelected;
     private boolean selected;
-    final List<GraphicalObjectListener> listeners = new ArrayList<>();
+    private final List<GraphicalObjectListener> listeners;
 
     public AbstractGraphicalObject(Point[] hotPoints) {
         this.hotPoints = hotPoints;
+        listeners = new ArrayList<>();
     }
 
     public Point getHotPoint(int index) {

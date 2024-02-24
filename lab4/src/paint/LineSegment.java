@@ -6,22 +6,14 @@ public class LineSegment extends AbstractGraphicalObject{
     private final Point end;
     public LineSegment() {
         super(new Point[]{new Point(0, 0), new Point(10, 0)});
-        this.start = new Point(0, 0);
-        this.end = new Point(10, 0);
+        this.start = super.getHotPoint(0);
+        this.end = super.getHotPoint(1);
     }
 
     public LineSegment(Point start, Point end) {
         super(new Point[]{start, end});
         this.start = start;
         this.end = end;
-    }
-
-    public Point getStart() {
-        return start;
-    }
-
-    public Point getEnd() {
-        return end;
     }
 
     public Rectangle getBoundingBox() {
