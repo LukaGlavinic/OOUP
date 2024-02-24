@@ -6,11 +6,15 @@ public class GeometryUtil {
     }
 
     public static double distanceFromLineSegment(Point s, Point e, Point p) {
-        // Izračunaj koliko je točka P udaljena od linijskog segmenta određenog
-        // početnom točkom S i završnom točkom E. Uočite: ako je točka P iznad/ispod
-        // tog segmenta, ova udaljenost je udaljenost okomice spuštene iz P na S-E.
-        // Ako je točka P "prije" točke S ili "iza" točke E, udaljenost odgovara
-        // udaljenosti od P do početne/konačne točke segmenta.
-        return 0;
+        double k = (double) (e.getY() - s.getY()) / (e.getX() - s.getX());
+        double b = s.getY() - k * s.getX();
+        if (p.getY() == k * p.getX() + b) {
+            return Math.min(distanceFromPoint(p, s), distanceFromPoint(p, e));
+        }
+        double k_proj = - 1 / k;
+        double b_proj = p.getY() - k_proj * p.getX();
+        double x_proj = (b_proj - b) / (k - k_proj);
+        double y_proj = k * x_proj + b;
+        return distanceFromPoint(p, new Point((int) Math.round(x_proj), (int) Math.round(y_proj)));
     }
 }

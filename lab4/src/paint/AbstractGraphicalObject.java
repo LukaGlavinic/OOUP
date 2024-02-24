@@ -3,11 +3,11 @@ package paint;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGraphicalObject {
+public abstract class AbstractGraphicalObject implements GraphicalObject{
     private Point[] hotPoints;
     private boolean[] hotPointSelected;
     private boolean selected;
-    List<GraphicalObjectListener> listeners = new ArrayList<>();
+    final List<GraphicalObjectListener> listeners = new ArrayList<>();
 
     public AbstractGraphicalObject(Point[] hotPoints) {
         this.hotPoints = hotPoints;

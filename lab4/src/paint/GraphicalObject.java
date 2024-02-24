@@ -1,8 +1,5 @@
 package paint;
 
-import java.util.List;
-import java.util.Stack;
-
 public interface GraphicalObject {
 //    Podrška za uređivanje objekta
     boolean isSelected();
