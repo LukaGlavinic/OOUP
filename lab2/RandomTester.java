@@ -23,14 +23,14 @@ public class RandomTester implements DistributionTester{
 
     @Override
     public int percentilRank(int p, ArrayList<Integer> lista) {
-        int np = (int) Math.ceil(p * lista.size() / 100);
+        int np = (int) Math.ceil((double) (p * lista.size()) / 100);
         return lista.get(np - 1);
     }
 
     @Override
     public int percentilInterp(int p, ArrayList<Integer> listaBrojeva) {
         Collections.sort(listaBrojeva);
-        int v_i = listaBrojeva.get(0), v_i1 = 0;
+        int v_i = listaBrojeva.getFirst(), v_i1 = 0;
         int N = listaBrojeva.size();
         double p_v_i = 0, p_v_i1 = 0;
         for(int i = 1; i <= N; i++) {

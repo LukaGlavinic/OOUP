@@ -15,15 +15,13 @@ public class AkcijaMedian implements Akcija{
     public void akcija() {
         int median;
         List<Integer> kopija = new ArrayList<>(slijed.getCijeliBrojevi().size());
-        for(int i = 0; i < slijed.getCijeliBrojevi().size(); i++) {
-            kopija.add(slijed.getCijeliBrojevi().get(i));
-        }
+        kopija.addAll(slijed.getCijeliBrojevi());
         Collections.sort(kopija);
         int N = kopija.size();
         if(N % 2 == 1) {
             median = kopija.get((N + 1) / 2 - 1);
         }else {
-            median = Math.round((kopija.get(N / 2 - 1) + kopija.get(N / 2)) / 2);
+            median = Math.round((float) (kopija.get(N / 2 - 1) + kopija.get(N / 2)) / 2);
         }
         System.out.println("Trenutni median slijeda je: " + median);
     }

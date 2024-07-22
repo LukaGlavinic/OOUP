@@ -8,8 +8,8 @@ public class Cell {
     private String ime;
     private String exp;
     private double value;
-    private Sheet tablica;
-    private List<Promatrac> listaPromatraca;
+    private final Sheet tablica;
+    private final List<Promatrac> listaPromatraca;
 
     public Cell(Sheet tablica) {
         this.tablica = tablica;

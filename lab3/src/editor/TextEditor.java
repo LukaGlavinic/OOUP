@@ -2,9 +2,7 @@ package editor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serial;
@@ -281,8 +279,18 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                             && e.getKeyCode() != KeyEvent.VK_F11
                             && e.getKeyCode() != KeyEvent.VK_F12)) {
                         model.insert(e.getKeyChar(), true);
+                        System.out.println(model.getCursorLocation());
                     }
                 }
+            }
+        });
+
+//        MOUSE CLICK
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(e.getX() + " " + e.getY());
+                Location newCursLoc = new Location(e.getX()/10, e.getY()/10);
+                model.setCursorLocation(newCursLoc);
             }
         });
     }

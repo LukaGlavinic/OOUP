@@ -2,7 +2,7 @@ package lab2;
 
 public class PromatracCelije implements Promatrac{
 
-    private Cell vlastita;
+    private final Cell vlastita;
 
     public PromatracCelije(Cell vlastita) {
         this.vlastita = vlastita;

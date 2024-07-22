@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class TipkovnickiIzvor implements IzvorBrojeva{
 
-    private Scanner skener;
+    private final Scanner skener;
 
     public TipkovnickiIzvor() {
         this.skener = new Scanner(System.in);

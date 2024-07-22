@@ -1,12 +1,7 @@
 package lab2;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 
@@ -28,13 +23,13 @@ public class AkcijaZapisUDat implements Akcija{
             writer.close();
             Writer bw = new BufferedWriter(
                             new OutputStreamWriter(
-                            new BufferedOutputStream(Files.newOutputStream(datoteka.toPath())),"UTF-8"));
-            String zapis = "";
+                            new BufferedOutputStream(Files.newOutputStream(datoteka.toPath())), StandardCharsets.UTF_8));
+            StringBuilder zapis = new StringBuilder();
             for(Integer i : slijed.getCijeliBrojevi()) {
-                zapis += i;
-                zapis += " ";
+                zapis.append(i);
+                zapis.append(" ");
             }
-            bw.write(zapis);
+            bw.write(zapis.toString());
             LocalDateTime currentDateTime = LocalDateTime.now();
             bw.write(currentDateTime.toString());
             bw.close();

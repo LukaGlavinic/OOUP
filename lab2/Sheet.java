@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Sheet {
 
-    private Cell[][] poljaTablice;
+    private final Cell[][] poljaTablice;
     private int indexi;
     private int indexj;
     private Set<String> setPozivateljskih;
@@ -21,13 +21,13 @@ public class Sheet {
 
     public Cell ref(String refString) {
         Cell polje = null;
-        for(int i = 0; i < poljaTablice.length; i++) {
-            for(int j = 0; j < poljaTablice[i].length; j++) {
-                polje = poljaTablice[i][j];
-                if(polje == null) {
+        for (Cell[] cells : poljaTablice) {
+            for (Cell cell : cells) {
+                polje = cell;
+                if (polje == null) {
                     return null;
                 }
-                if(polje.getIme().equals(refString)) {
+                if (polje.getIme().equals(refString)) {
                     return polje;
                 }
             }
@@ -63,7 +63,7 @@ public class Sheet {
         }
         
         List<Cell> zaPromatrati = getrefs(polje);
-        if(zaPromatrati.size() > 0) {
+        if(!zaPromatrati.isEmpty()) {
             for(Cell c : zaPromatrati) {
                 c.dodajPromatraca(new PromatracCelije(polje));
             }
@@ -109,10 +109,8 @@ public class Sheet {
     public double evaluate(Cell cell) {
         double vrijednost = 0;
         List<Cell> referentne = getrefs(cell);
-        if(referentne.size() == 0) {
-            if(setPozivateljskih.contains(cell.getIme())) {
-                setPozivateljskih.remove(cell.getIme());
-            }
+        if(referentne.isEmpty()) {
+            setPozivateljskih.remove(cell.getIme());
             return cell.getValue();
         }else {
             setPozivateljskih.add(cell.getIme());
@@ -127,10 +125,9 @@ public class Sheet {
     }
 
     public void print() {
-        for(int i = 0; i < poljaTablice.length; i++) {
-            for(int j = 0; j < poljaTablice[i].length; j++) {
-                Cell tren = poljaTablice[i][j];
-                if(tren != null) {
+        for (Cell[] cells : poljaTablice) {
+            for (Cell tren : cells) {
+                if (tren != null) {
                     System.out.println(tren.getIme() + ": " + tren.getExp() + " = " + tren.getValue());
                 }
             }

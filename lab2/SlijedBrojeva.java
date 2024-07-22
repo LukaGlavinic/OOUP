@@ -3,9 +3,9 @@ package lab2;
 import java.util.ArrayList;
 
 public class SlijedBrojeva {
-    private ArrayList<Integer> cijeliBrojevi;
-    private IzvorBrojeva izvor;
-    private ArrayList<Akcija> akcije;
+    private final ArrayList<Integer> cijeliBrojevi;
+    private final IzvorBrojeva izvor;
+    private final ArrayList<Akcija> akcije;
 
     public SlijedBrojeva(IzvorBrojeva izvor) {
         this.cijeliBrojevi = new ArrayList<>();
@@ -29,7 +29,7 @@ public class SlijedBrojeva {
 
     public void kreni() {
         try {
-            Integer broj = izvor.next();
+            int broj = izvor.next();
             while(broj != -1) {
                 cijeliBrojevi.add(broj);
                 obavjesti();
