@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AkcijaMedian implements Akcija{
-    private SlijedBrojeva slijed;
+    private final SlijedBrojeva slijed;
 
     public AkcijaMedian(SlijedBrojeva slijed) {
         this.slijed = slijed;

@@ -33,7 +33,7 @@ public class FibonacciTester implements DistributionTester{
         Collections.sort(listaBrojeva);
         int v_i = listaBrojeva.getFirst(), v_i1 = 0;
         int N = listaBrojeva.size();
-        double p_v_i = 0, p_v_i1 = 0;
+        double p_v_i = 0, p_v_i1;
         for(int i = 1; i <= N; i++) {
             v_i = listaBrojeva.get(i - 1);
             p_v_i = 100 * (i - 0.5) / N;

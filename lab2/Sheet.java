@@ -90,11 +90,11 @@ public class Sheet {
     public List<Cell> getrefs(Cell cell) {
         List<Cell> listaPolja = new ArrayList<>();
         String expPolja = cell.getExp();
-        String[] poljaZaDodat = null;
+        String[] poljaZaDodat;
         if(expPolja.contains("+") || expPolja.contains("-") ||expPolja.contains("*") ||expPolja.contains("/")) {
             poljaZaDodat = expPolja.split("[+\\-*/]");
-            for(int i = 0; i < poljaZaDodat.length; i++) {
-                listaPolja.add(ref(poljaZaDodat[i]));
+            for (String s : poljaZaDodat) {
+                listaPolja.add(ref(s));
             }
         }else {
             try {

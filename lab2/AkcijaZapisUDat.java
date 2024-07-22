@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 public class AkcijaZapisUDat implements Akcija{
 
-    private File datoteka;
-    private SlijedBrojeva slijed;
+    private final File datoteka;
+    private final SlijedBrojeva slijed;
 
     public AkcijaZapisUDat(String putanja, SlijedBrojeva slijed) {
         this.datoteka = new File(putanja);
