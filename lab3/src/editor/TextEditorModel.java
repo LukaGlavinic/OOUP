@@ -342,7 +342,7 @@ public class TextEditorModel {
     }
 
     /**
-     * PROMATRACI KURSORA
+     * CURSOR OBSERVERS
      */
     public void addCursorObserver(CursorObserver o) {
         cursorObservers.add(o);
@@ -353,7 +353,7 @@ public class TextEditorModel {
     }
 
     /**
-     * PROMATRACI TEKSTA
+     * TEXT OBSERVERS
      */
     public void addTextObserver(TextObserver o) {
         textObservers.add(o);

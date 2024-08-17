@@ -23,6 +23,14 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     private Canvas canvas;
     private JLabel statusBar;
 
+    private FontMetrics fm;
+
+    private JMenuBar menuBar;
+
+    private Location mouseClick;
+
+    private Location mouseReleased;
+
     public TextEditor() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(0, 0);
@@ -59,7 +67,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
 
     private void initGUI() {
-        model = new TextEditorModel("");
+        model = new TextEditorModel("aaaaa\nbbbbbb\nccccccccccc\ndddd");
         model.setParentFrame(this);
         model.addCursorObserver(this);
         model.addTextObserver(this);
@@ -279,7 +287,6 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
                             && e.getKeyCode() != KeyEvent.VK_F11
                             && e.getKeyCode() != KeyEvent.VK_F12)) {
                         model.insert(e.getKeyChar(), true);
-                        System.out.println(model.getCursorLocation());
                     }
                 }
             }
@@ -287,12 +294,34 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 
 //        MOUSE CLICK
         addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX() + " " + e.getY());
-                Location newCursLoc = new Location(e.getX()/10, e.getY()/10);
-                model.setCursorLocation(newCursLoc);
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseClick = calculateLocation(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                mouseReleased = calculateLocation(e);
+
+                Location endOfDocument = model.getEndOfDocument();
+                if (mouseReleased.getY() > endOfDocument.getY()) mouseReleased.setY(endOfDocument.getY());
+
+                Iterator<String> linesIterator = model.allLines();
+                String currentLine = null;
+                for (int i = 0; i <= mouseReleased.getY(); i++) {
+                    currentLine = linesIterator.next();
+                }
+                assert currentLine != null;
+                if (mouseReleased.getX() > currentLine.length()) mouseReleased.setX(currentLine.length());
+
+                model.setCursorLocation(mouseReleased);
+                model.setSelectionRange(new LocationRange(mouseClick, mouseReleased));
             }
         });
+    }
+
+    private Location calculateLocation(MouseEvent e) {
+        return new Location(e.getX() / fm.charWidth(' ') - 1, (e.getY() - menuBar.getHeight()) / fm.getAscent() - 5);
     }
 
     private void createActions() {
@@ -351,7 +380,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
     }
 
     private void createMenus() {
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         menuBar.setFocusable(false);
 
         JMenu fileMenu = new JMenu("File");
@@ -409,7 +438,6 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
 				pluginMenu.add(i);
 			}
 		}
-		
         setJMenuBar(menuBar);
     }
     
@@ -679,7 +707,7 @@ public class TextEditor extends JFrame implements CursorObserver, TextObserver {
             Font font = new Font("Monospaced", Font.PLAIN, 12);
             g2d.setFont(font);
 
-            FontMetrics fm = g2d.getFontMetrics();
+            fm = g2d.getFontMetrics();
 
             //draw selection
             g2d.setColor(Color.LIGHT_GRAY);
